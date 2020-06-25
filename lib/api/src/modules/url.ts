@@ -79,19 +79,19 @@ const initialUrlSupport = ({
     selectedPanel = addonPanel;
   }
 
-  if (selectedKind && selectedStory) {
-    const id = toId(selectedKind, selectedStory);
-    setTimeout(() => navigate(`/${viewMode}/${id}`, { replace: true }), 1);
-  } else if (selectedKind) {
-    // Create a "storyId" of the form `kind-sanitized--*`
-    const standInId = toId(selectedKind, 'star').replace(/star$/, '*');
-    setTimeout(() => navigate(`/${viewMode}/${standInId}`, { replace: true }), 1);
-  } else if (!queryPath || queryPath === '/') {
-    setTimeout(() => navigate(`/${viewMode}/*`, { replace: true }), 1);
-  } else if (Object.keys(query).length > 1) {
-    // remove other queries
-    setTimeout(() => navigate(`${queryPath}`, { replace: true }), 1);
-  }
+  // if (selectedKind && selectedStory) {
+  //   const id = toId(selectedKind, selectedStory);
+  //   setTimeout(() => navigate(`/${viewMode}/${id}`, { replace: true }), 1);
+  // } else if (selectedKind) {
+  //   // Create a "storyId" of the form `kind-sanitized--*`
+  //   const standInId = toId(selectedKind, 'star').replace(/star$/, '*');
+  //   setTimeout(() => navigate(`/${viewMode}/${standInId}`, { replace: true }), 1);
+  // } else if (!queryPath || queryPath === '/') {
+  //   setTimeout(() => navigate(`/${viewMode}/*`, { replace: true }), 1);
+  // } else if (Object.keys(query).length > 1) {
+  //   // remove other queries
+  //   setTimeout(() => navigate(`${queryPath}`, { replace: true }), 1);
+  // }
 
   return { viewMode, layout: addition, selectedPanel, location, path, customQueryParams, storyId };
 };
@@ -154,10 +154,14 @@ export const init: ModuleFn = ({ store, navigate, state, provider, fullAPI, ...r
     },
   };
 
-  const initModule = () => {
+  const initModule = async () => {
     fullAPI.on(NAVIGATE_URL, (url: string, options: { [k: string]: any }) => {
       fullAPI.navigateUrl(url, options);
     });
+
+    if (await fullAPI.showReleaseNotesOnLaunch()) {
+      navigate('/settings/release-notes');
+    }
   };
 
   return {
