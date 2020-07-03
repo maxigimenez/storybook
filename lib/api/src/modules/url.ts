@@ -160,7 +160,7 @@ export const init: ModuleFn = ({ store, navigate, state, provider, fullAPI, ...r
     });
 
     if (fullAPI.showReleaseNotesOnLaunch()) {
-      setTimeout(() => navigate('/settings/release-notes', { replace: true }), 1);
+      navigate('/settings/release-notes');
     }
   };
 
